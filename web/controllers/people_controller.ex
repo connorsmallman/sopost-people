@@ -8,6 +8,6 @@ defmodule SopostPeople.PeopleController do
 
   def show(conn, %{"location" => location}) do
     people = Repo.get_by_location(SopostPeople.Person, location)
-    render conn, "location.html", people: people
+    render conn, "show.html", people: people
   end
 end
