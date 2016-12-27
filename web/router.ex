@@ -16,8 +16,9 @@ defmodule SopostPeople.Router do
   scope "/", SopostPeople do
     pipe_through :browser # Use the default browser stack
 
-    get "/people/", PeopleController, :index
-    get "/people/:location", PeopleController, :show
+    get "/", PeopleController, :index
+    get "/:location", PeopleController, :show
+    get "/people/new", PeopleController, :new
     get "/", PageController, :index
   end
 
@@ -25,4 +26,10 @@ defmodule SopostPeople.Router do
   # scope "/api", SopostPeople do
   #   pipe_through :api
   # end
+
+  scope "/api", SopostPeople do
+    pipe_through :api
+
+    resources "/people", PeopleController, :create
+  end
 end

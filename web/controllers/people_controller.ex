@@ -10,4 +10,8 @@ defmodule SopostPeople.PeopleController do
     people = Repo.get_by_location(SopostPeople.Person, location)
     render conn, "show.html", people: people
   end
+
+  def new(conn, _params) do
+    render conn, "new.html"
+  end
 end
