@@ -1,0 +1,15 @@
+<h1>People</h1>
+<table>
+  <%= for person <- @people do %>
+    <tr>
+      <td><img src="<%= person.avatar %>"/></td>
+      <td><%= person.name %></td>
+      <td><%= person.title %></td>
+      <td>
+        <%= for loc <- person.locations do %>
+          <%= link loc, to: people_path(@conn, :show, loc) %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>

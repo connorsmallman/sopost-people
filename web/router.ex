@@ -16,6 +16,8 @@ defmodule SopostPeople.Router do
   scope "/", SopostPeople do
     pipe_through :browser # Use the default browser stack
 
+    get "/people/", PeopleController, :index
+    get "/people/:location", PeopleController, :show
     get "/", PageController, :index
   end
 
