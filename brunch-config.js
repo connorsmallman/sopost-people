@@ -42,6 +42,7 @@ exports.config = {
     // Dependencies and current project directories to watch
     watched: [
       "web/static",
+      "web/elm/SopostPeople.elm",
       "test/static"
     ],
 
@@ -54,7 +55,12 @@ exports.config = {
     babel: {
       // Do not use ES6 compiler in vendor code
       ignore: [/web\/static\/vendor/]
-    }
+    },
+    elmBrunch: {
+      elmFolder: "web/elm",
+      mainModules: ["SopostPeople.elm"],
+      outputFolder: "../static/vendor"
+    },
   },
 
   modules: {

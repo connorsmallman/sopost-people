@@ -19,3 +19,4 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+const elmApp = Elm.SopostPeople.embed(document.getElementById('elm-main'));
