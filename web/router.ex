@@ -23,13 +23,9 @@ defmodule SopostPeople.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", SopostPeople do
-  #   pipe_through :api
-  # end
-
   scope "/api", SopostPeople do
     pipe_through :api
 
-    resources "/people", PeopleController, :create
+    resources "/people", PeopleController, only: [:create]
   end
 end

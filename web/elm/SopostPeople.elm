@@ -21,19 +21,20 @@ type alias Model =
   { name : String
   , title: String
   , locations : String
-  , avatarUrl : String
+  , avatar : String
+  , flash : String
   }
 
 init : (Model, Cmd Msg)
 init =
-  (Model "" "" "" "", Cmd.none)
+  (Model "" "" "" "" "", Cmd.none)
 
 type Msg
     = Name String
     | Title String
     | Locations String
-    | AvatarUrl String
-    | SendPerson (Result Http.Error Model)
+    | Avatar String
+    | SendPerson (Result Http.Error Person)
     | Submit
 
 
@@ -49,48 +50,81 @@ update msg model =
     Locations locations ->
       { model | locations = locations }
         ! []
-    AvatarUrl url ->
-      { model | avatarUrl = url }
+    Avatar url ->
+      { model | avatar = url }
         ! []
     SendPerson (Ok person) ->
-      model ! []
+      { model | flash = person.name ++ " Created!" } ! []
     SendPerson (Err _) ->
       model ! []
     Submit ->
-      model ! [ send model ]
+      let
+        person = Person model.name model.title model.locations model.avatar
+      in
+        model ! [ send person ]
+
+showFlash : String -> Html Msg
+showFlash message =
+  case String.isEmpty message of
+    True ->
+      span [] [ text "" ]
+    False ->
+      span [] [ text message ]
 
 -- VIEW
 view : Model -> Html Msg
 view model =
-  Html.form [ onSubmit Submit ]
-    [ input [ type_ "text", placeholder "Name", onInput Name ] []
-    , input [ type_ "text", placeholder "Title", onInput Title ] []
-    , input [ type_ "text", placeholder "Locations", onInput Locations ] []
-    , input [ type_ "text", placeholder "Avatar", onInput AvatarUrl ] []
-    , button [ type_ "submit" ] [ text "Submit" ]
-    ]
+  div []
+  [ div [] [ showFlash model.flash ]
+  , Html.form [ onSubmit Submit ]
+      [ div []
+          [ label [] [ text "Name" ]
+          , input [ type_ "text", placeholder "Name", onInput Name ] []
+          ]
+      , div []
+          [ label [] [ text "Title" ]
+          , input [ type_ "text", placeholder "Title", onInput Title ] []
+          ]
+      , div []
+          [ label [] [ text "Locations" ]
+          , input [ type_ "text", placeholder "Locations", onInput Locations ] []
+          ]
+      , div []
+          [ label [] [ text "Avatar" ]
+          , input [ type_ "text", placeholder "Avatar", onInput Avatar ] []
+          ]
+      , button [ type_ "submit" ] [ text "Submit" ]
+      ]
+  ]
 
-decoder : Decode.Decoder Model
+type alias Person =
+  { name : String
+  , title : String
+  , locations : String
+  , avatar : String
+  }
+
+decoder : Decode.Decoder Person
 decoder =
-  Decode.map4 Model
+  Decode.map4 Person
     (Decode.at ["name"] Decode.string)
     (Decode.at ["title"] Decode.string)
     (Decode.at ["locations"] Decode.string)
     (Decode.at ["avatar"] Decode.string)
 
-encoder : Model -> Encode.Value
-encoder model =
+encoder : Person -> Encode.Value
+encoder person =
   Encode.object
-      [ ("name", Encode.string model.name)
-      , ("title", Encode.string model.title)
-      , ("locations", Encode.string model.locations)
-      , ("avatarUrl", Encode.string model.avatarUrl)
+      [ ("name", Encode.string person.name)
+      , ("title", Encode.string person.title)
+      , ("locations", Encode.string person.locations)
+      , ("avatar", Encode.string person.avatar)
       ]
 
 createUrl : String
 createUrl =
     "/api/people"
 
-send : Model -> Cmd Msg
-send model =
-  Http.send SendPerson (Http.post createUrl (Http.jsonBody (encoder model)) decoder)
+send : Person -> Cmd Msg
+send person =
+  Http.send SendPerson (Http.post createUrl (Http.jsonBody (encoder person)) decoder)

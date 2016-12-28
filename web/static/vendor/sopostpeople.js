@@ -9030,35 +9030,35 @@ var _elm_lang$http$Http$StringPart = F2(
 var _elm_lang$http$Http$stringPart = _elm_lang$http$Http$StringPart;
 
 var _user$project$SopostPeople$createUrl = '/api/people';
-var _user$project$SopostPeople$encoder = function (model) {
+var _user$project$SopostPeople$encoder = function (person) {
 	return _elm_lang$core$Json_Encode$object(
 		{
 			ctor: '::',
 			_0: {
 				ctor: '_Tuple2',
 				_0: 'name',
-				_1: _elm_lang$core$Json_Encode$string(model.name)
+				_1: _elm_lang$core$Json_Encode$string(person.name)
 			},
 			_1: {
 				ctor: '::',
 				_0: {
 					ctor: '_Tuple2',
 					_0: 'title',
-					_1: _elm_lang$core$Json_Encode$string(model.title)
+					_1: _elm_lang$core$Json_Encode$string(person.title)
 				},
 				_1: {
 					ctor: '::',
 					_0: {
 						ctor: '_Tuple2',
 						_0: 'locations',
-						_1: _elm_lang$core$Json_Encode$string(model.locations)
+						_1: _elm_lang$core$Json_Encode$string(person.locations)
 					},
 					_1: {
 						ctor: '::',
 						_0: {
 							ctor: '_Tuple2',
-							_0: 'avatarUrl',
-							_1: _elm_lang$core$Json_Encode$string(model.avatarUrl)
+							_0: 'avatar',
+							_1: _elm_lang$core$Json_Encode$string(person.avatar)
 						},
 						_1: {ctor: '[]'}
 					}
@@ -9066,18 +9066,44 @@ var _user$project$SopostPeople$encoder = function (model) {
 			}
 		});
 };
-var _user$project$SopostPeople$Model = F4(
-	function (a, b, c, d) {
-		return {name: a, title: b, locations: c, avatarUrl: d};
+var _user$project$SopostPeople$showFlash = function (message) {
+	var _p0 = _elm_lang$core$String$isEmpty(message);
+	if (_p0 === true) {
+		return A2(
+			_elm_lang$html$Html$span,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(''),
+				_1: {ctor: '[]'}
+			});
+	} else {
+		return A2(
+			_elm_lang$html$Html$span,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(message),
+				_1: {ctor: '[]'}
+			});
+	}
+};
+var _user$project$SopostPeople$Model = F5(
+	function (a, b, c, d, e) {
+		return {name: a, title: b, locations: c, avatar: d, flash: e};
 	});
 var _user$project$SopostPeople$init = {
 	ctor: '_Tuple2',
-	_0: A4(_user$project$SopostPeople$Model, '', '', '', ''),
+	_0: A5(_user$project$SopostPeople$Model, '', '', '', '', ''),
 	_1: _elm_lang$core$Platform_Cmd$none
 };
+var _user$project$SopostPeople$Person = F4(
+	function (a, b, c, d) {
+		return {name: a, title: b, locations: c, avatar: d};
+	});
 var _user$project$SopostPeople$decoder = A5(
 	_elm_lang$core$Json_Decode$map4,
-	_user$project$SopostPeople$Model,
+	_user$project$SopostPeople$Person,
 	A2(
 		_elm_lang$core$Json_Decode$at,
 		{
@@ -9114,7 +9140,7 @@ var _user$project$SopostPeople$Submit = {ctor: 'Submit'};
 var _user$project$SopostPeople$SendPerson = function (a) {
 	return {ctor: 'SendPerson', _0: a};
 };
-var _user$project$SopostPeople$send = function (model) {
+var _user$project$SopostPeople$send = function (person) {
 	return A2(
 		_elm_lang$http$Http$send,
 		_user$project$SopostPeople$SendPerson,
@@ -9122,46 +9148,50 @@ var _user$project$SopostPeople$send = function (model) {
 			_elm_lang$http$Http$post,
 			_user$project$SopostPeople$createUrl,
 			_elm_lang$http$Http$jsonBody(
-				_user$project$SopostPeople$encoder(model)),
+				_user$project$SopostPeople$encoder(person)),
 			_user$project$SopostPeople$decoder));
 };
 var _user$project$SopostPeople$update = F2(
 	function (msg, model) {
-		var _p0 = A2(_elm_lang$core$Debug$log, 'update', msg);
-		switch (_p0.ctor) {
+		var _p1 = A2(_elm_lang$core$Debug$log, 'update', msg);
+		switch (_p1.ctor) {
 			case 'Name':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{name: _p0._0}),
+						{name: _p1._0}),
 					{ctor: '[]'});
 			case 'Title':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{title: _p0._0}),
+						{title: _p1._0}),
 					{ctor: '[]'});
 			case 'Locations':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{locations: _p0._0}),
+						{locations: _p1._0}),
 					{ctor: '[]'});
-			case 'AvatarUrl':
+			case 'Avatar':
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					_elm_lang$core$Native_Utils.update(
 						model,
-						{avatarUrl: _p0._0}),
+						{avatar: _p1._0}),
 					{ctor: '[]'});
 			case 'SendPerson':
-				if (_p0._0.ctor === 'Ok') {
+				if (_p1._0.ctor === 'Ok') {
 					return A2(
 						_elm_lang$core$Platform_Cmd_ops['!'],
-						model,
+						_elm_lang$core$Native_Utils.update(
+							model,
+							{
+								flash: A2(_elm_lang$core$Basics_ops['++'], _p1._0._0.name, ' Created!')
+							}),
 						{ctor: '[]'});
 				} else {
 					return A2(
@@ -9170,18 +9200,19 @@ var _user$project$SopostPeople$update = F2(
 						{ctor: '[]'});
 				}
 			default:
+				var person = A4(_user$project$SopostPeople$Person, model.name, model.title, model.locations, model.avatar);
 				return A2(
 					_elm_lang$core$Platform_Cmd_ops['!'],
 					model,
 					{
 						ctor: '::',
-						_0: _user$project$SopostPeople$send(model),
+						_0: _user$project$SopostPeople$send(person),
 						_1: {ctor: '[]'}
 					});
 		}
 	});
-var _user$project$SopostPeople$AvatarUrl = function (a) {
-	return {ctor: 'AvatarUrl', _0: a};
+var _user$project$SopostPeople$Avatar = function (a) {
+	return {ctor: 'Avatar', _0: a};
 };
 var _user$project$SopostPeople$Locations = function (a) {
 	return {ctor: 'Locations', _0: a};
@@ -9194,102 +9225,192 @@ var _user$project$SopostPeople$Name = function (a) {
 };
 var _user$project$SopostPeople$view = function (model) {
 	return A2(
-		_elm_lang$html$Html$form,
-		{
-			ctor: '::',
-			_0: _elm_lang$html$Html_Events$onSubmit(_user$project$SopostPeople$Submit),
-			_1: {ctor: '[]'}
-		},
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$input,
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$type_('text'),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onInput(_user$project$SopostPeople$Name),
-							_1: {ctor: '[]'}
-						}
-					}
-				},
-				{ctor: '[]'}),
+					_0: _user$project$SopostPeople$showFlash(model.flash),
+					_1: {ctor: '[]'}
+				}),
 			_1: {
 				ctor: '::',
 				_0: A2(
-					_elm_lang$html$Html$input,
+					_elm_lang$html$Html$form,
 					{
 						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$type_('text'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$placeholder('Title'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Events$onInput(_user$project$SopostPeople$Title),
-								_1: {ctor: '[]'}
-							}
-						}
+						_0: _elm_lang$html$Html_Events$onSubmit(_user$project$SopostPeople$Submit),
+						_1: {ctor: '[]'}
 					},
-					{ctor: '[]'}),
-				_1: {
-					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$input,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$type_('text'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$placeholder('Locations'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onInput(_user$project$SopostPeople$Locations),
-									_1: {ctor: '[]'}
-								}
-							}
-						},
-						{ctor: '[]'}),
-					_1: {
+					{
 						ctor: '::',
 						_0: A2(
-							_elm_lang$html$Html$input,
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
 							{
 								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$type_('text'),
+								_0: A2(
+									_elm_lang$html$Html$label,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Name'),
+										_1: {ctor: '[]'}
+									}),
 								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$placeholder('Avatar'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onInput(_user$project$SopostPeople$AvatarUrl),
-										_1: {ctor: '[]'}
-									}
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$type_('text'),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Events$onInput(_user$project$SopostPeople$Name),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {ctor: '[]'}
 								}
-							},
-							{ctor: '[]'}),
+							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$button,
+								_elm_lang$html$Html$div,
+								{ctor: '[]'},
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('submit'),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Submit'),
-									_1: {ctor: '[]'}
+									_0: A2(
+										_elm_lang$html$Html$label,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text('Title'),
+											_1: {ctor: '[]'}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$input,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$type_('text'),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$placeholder('Title'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Events$onInput(_user$project$SopostPeople$Title),
+														_1: {ctor: '[]'}
+													}
+												}
+											},
+											{ctor: '[]'}),
+										_1: {ctor: '[]'}
+									}
 								}),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$div,
+									{ctor: '[]'},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$label,
+											{ctor: '[]'},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Locations'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$input,
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$type_('text'),
+													_1: {
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$placeholder('Locations'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Events$onInput(_user$project$SopostPeople$Locations),
+															_1: {ctor: '[]'}
+														}
+													}
+												},
+												{ctor: '[]'}),
+											_1: {ctor: '[]'}
+										}
+									}),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{ctor: '[]'},
+										{
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$label,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: _elm_lang$html$Html$text('Avatar'),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$input,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$type_('text'),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$placeholder('Avatar'),
+															_1: {
+																ctor: '::',
+																_0: _elm_lang$html$Html_Events$onInput(_user$project$SopostPeople$Avatar),
+																_1: {ctor: '[]'}
+															}
+														}
+													},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}
+										}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$type_('submit'),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Submit'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
 						}
-					}
-				}
+					}),
+				_1: {ctor: '[]'}
 			}
 		});
 };
@@ -9298,7 +9419,7 @@ var _user$project$SopostPeople$main = _elm_lang$html$Html$program(
 		init: _user$project$SopostPeople$init,
 		view: _user$project$SopostPeople$view,
 		update: _user$project$SopostPeople$update,
-		subscriptions: function (_p1) {
+		subscriptions: function (_p2) {
 			return _elm_lang$core$Platform_Sub$none;
 		}
 	})();
